@@ -1,6 +1,10 @@
-import React from 'react';
+interface SpinnerProps {
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  color?: 'white' | 'yellow' | 'gray' | 'dark';
+  className?: string;
+}
 
-const Spinner = ({ size = 'sm', color = 'white', className = '' }) => {
+const Spinner = ({ size = 'sm', color = 'white', className = '' }: SpinnerProps) => {
   const sizeClasses = {
     xs: 'h-3 w-3',
     sm: 'h-4 w-4',

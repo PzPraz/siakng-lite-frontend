@@ -1,28 +1,12 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import { getToken, getUser, removeToken, setToken, setUser } from '../api/config';
+import type { AuthUser } from '../types/api';
+import type { AuthContextValue } from '../types/api';
+import type { AuthProviderProps } from '../types/api';
 
-type UserRole = 'DOSEN' | 'MAHASISWA' | string;
-
-export interface AuthUser {
-  nama?: string;
-  role?: UserRole;
-  npm_atau_nip?: string;
-}
-
-interface AuthContextValue {
-  user: AuthUser | null;
-  token: string | undefined;
-  isAuthenticated: boolean;
-  login: (tokenValue: string, userValue: AuthUser) => void;
-  logout: () => void;
-}
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [tokenState, setTokenState] = useState<string | undefined>(() => getToken());

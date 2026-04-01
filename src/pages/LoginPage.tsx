@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../api/auth';
 import { useAuth } from '../contexts/AuthContext';
 import Spinner from '../components/Spinner';
@@ -34,6 +34,7 @@ const LoginPage = () => {
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
+        setIsLoading(false);
         return;
       } else {
         setError('Terjadi kesalahan saat login');
@@ -48,9 +49,11 @@ const LoginPage = () => {
       {/* Header Institusi*/}
       <div className="w-full max-w-md border-t-8 border-yellow-500 bg-white p-6 shadow-sm border-x border-b border-gray-300">
         <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 uppercase italic">
-            SIAK<span className="text-yellow-600">NG</span>-LITE
-          </h1>
+          <Link to="/dashboard">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 uppercase italic hover:opacity-80 transition-opacity">
+              SIAK<span className="text-yellow-600">NG</span>-LITE
+            </h1>
+          </Link>
           <div className="h-px bg-gray-200 w-full my-4"></div>
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">
             Sistem Informasi Akademik Next Generation

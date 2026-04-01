@@ -1,13 +1,7 @@
 import Cookies from 'js-cookie';
+import type { UserData } from '../types/api';
 
 export const API_BASE_URL = 'https://siakng-lite-backend-production.up.railway.app';
-
-export interface UserData {
-  nama?: string;
-  role?: string;
-  npm?: string;
-  nip?: string;
-}
 
 export const setToken = (token: string) => {
   Cookies.set('access_token', token, { expires: 1, secure: true, sameSite: 'strict' });

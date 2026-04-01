@@ -1,10 +1,7 @@
-import { API_BASE_URL, type UserData } from './config';
+import { API_BASE_URL } from './config';
+import type { LoginResponse } from '../types/api';
 
-export interface LoginResponse {
-  access_token?: string;
-  user?: UserData;
-  message?: string;
-}
+export type { LoginResponse };
 
 export const login = async (npm_atau_nip: string, password: string): Promise<LoginResponse> => {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {

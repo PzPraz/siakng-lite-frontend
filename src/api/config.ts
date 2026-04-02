@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import type { UserData } from '../types/api';
 
-export const API_BASE_URL = 'https://siakng-lite-backend-production.up.railway.app';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://siakng-lite-backend-production.up.railway.app';
 
 export const setToken = (token: string) => {
   Cookies.set('access_token', token, { expires: 1, secure: true, sameSite: 'strict' });

@@ -67,7 +67,7 @@ export type ScheduleItem = {
   ruangan: string;
 };
 
-type MergedIrsData = {
+export type MergedIrsData = {
 	id: number;
 	classId: number;
 	status: string;

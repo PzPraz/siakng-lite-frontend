@@ -45,7 +45,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-[#f0f0f0] flex flex-col items-center pt-20 font-sans">
-      
+
       {/* Header Institusi*/}
       <div className="w-full max-w-md border-t-8 border-yellow-500 bg-white p-6 shadow-sm border-x border-b border-gray-300">
         <div className="text-center">
@@ -118,11 +118,10 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full py-2 text-xs font-bold uppercase tracking-widest transition-colors duration-200 rounded-none border-b-4 border-yellow-600 active:border-b-0 active:mt-1 flex justify-center items-center ${
-                  isLoading
-                  ? 'bg-gray-500 border-gray-700 cursor-not-allowed text-gray-200'
-                  : 'bg-[#2c2c2c] text-white hover:bg-black'
-                }`}
+                className={`w-full py-2 text-xs font-bold uppercase tracking-widest transition-colors duration-200 rounded-none border-b-4 border-yellow-600 active:border-b-0 active:mt-1 flex justify-center items-center ${isLoading
+                    ? 'bg-gray-500 border-gray-700 cursor-not-allowed text-gray-200'
+                    : 'bg-[#2c2c2c] text-white hover:bg-black'
+                  }`}
               >
                 {isLoading ? (
                   <>
@@ -143,7 +142,7 @@ const LoginPage = () => {
             </p>
           </div>
         </div>
-        
+
         {/* Help Text Outside Card */}
         <p className="text-center mt-6 text-[10px] text-gray-500 font-medium">
           &copy; 2026 Prasetya Surya Syahputra.

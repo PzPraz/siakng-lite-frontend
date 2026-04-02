@@ -107,22 +107,27 @@ const ClassDetailPage = () => {
 
         {/* INFO UTAMA KELAS */}
         <div className="bg-white border border-gray-300 shadow-sm overflow-hidden">
-          <div className="bg-[#f8f8f8] border-b p-4 flex justify-between items-center">
-            <div className="flex items-center gap-3 text-blue-700">
-              <UserCheck size={20} />
-              <h1 className="font-black uppercase tracking-tight text-gray-800 text-lg">
+          <div className="bg-[#f8f8f8] border-b p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div className="flex items-start sm:items-center gap-3 text-blue-700">
+              <UserCheck size={20} className="shrink-0 mt-0.5 sm:mt-0" />
+              <h1 className="font-black uppercase tracking-tight text-gray-800 text-base md:text-lg leading-tight">
                 Kelas {classData?.namaKelas} - {classData?.namaMatkul}
               </h1>
             </div>
+
             {user?.role === 'DOSEN' && (
-              <div className="flex gap-2">
-                <button onClick={() => navigate(`edit`)} className="p-2 border hover:bg-blue-50 text-blue-700 transition-all bg-white"><Edit size={16} /></button>
-                <button onClick={() => setIsDeleteModalOpen(true)} className="p-2 border border-red-100 hover:bg-red-50 text-red-600 transition-all bg-white"><Trash2 size={16} /></button>
+              <div className="flex gap-2 w-full sm:w-auto justify-end">
+                <button onClick={() => navigate(`edit`)} className="p-2 border border-gray-300 hover:bg-blue-50 text-blue-700 transition-all bg-white flex-1 sm:flex-none flex justify-center items-center">
+                  <Edit size={16} />
+                </button>
+                <button onClick={() => setIsDeleteModalOpen(true)} className="p-2 border border-red-200 hover:bg-red-50 text-red-600 transition-all bg-white flex-1 sm:flex-none flex justify-center items-center">
+                  <Trash2 size={16} />
+                </button>
               </div>
             )}
           </div>
 
-          <div className="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
             <div className="space-y-2 md:col-span-2">
               <label className="text-[10px] font-bold text-gray-400 uppercase">Jadwal & Sesi Perkuliahan</label>
               <div className="font-mono text-gray-700 flex flex-col gap-2">
@@ -137,29 +142,31 @@ const ClassDetailPage = () => {
                               <span className="font-bold text-gray-800">{getHariName(sched.hari)}</span>, {sched.jamMulai} - {sched.jamSelesai}
                               <br />
                               <span className="flex items-center gap-1 mt-1 text-gray-500 font-sans text-[10px]">
-                                <MapPin size={10} /> {sched.ruangan}
+                                <MapPin size={10} className="shrink-0" /> <span className="truncate">{sched.ruangan}</span>
                               </span>
                             </>
                           )
-                          : sched /* Fallback jika data masih string */
+                          : sched
                         }
                       </span>
                     </div>
                   ))
                 ) : (
-                  <p className="flex items-center gap-2"><Calendar size={14} className="text-gray-400" /> TBA</p>
+                  <p className="flex items-center gap-2 text-xs"><Calendar size={14} className="text-gray-400" /> TBA</p>
                 )}
               </div>
             </div>
 
             <div className="space-y-1">
               <label className="text-[10px] font-bold text-gray-400 uppercase">Kapasitas</label>
-              <p className="font-bold text-gray-700 flex items-center gap-2"><Users size={14} className="text-gray-400" /> {classData?.kapasitas} Mahasiswa</p>
+              <p className="font-bold text-gray-700 flex items-center gap-2 text-xs md:text-sm">
+                <Users size={14} className="text-gray-400 shrink-0" /> {classData?.kapasitas} Mahasiswa
+              </p>
             </div>
 
             <div className="space-y-1">
               <label className="text-[10px] font-bold text-gray-400 uppercase">Dosen Pengampu</label>
-              <p className="font-bold text-blue-800 uppercase italic">
+              <p className="font-bold text-blue-800 uppercase italic text-xs md:text-sm leading-tight">
                 {classData?.namaDosen || 'Staf Pengajar'}
               </p>
             </div>
@@ -169,48 +176,70 @@ const ClassDetailPage = () => {
         {/* DAFTAR MAHASISWA  */}
         {user?.role === 'DOSEN' && (
           <div className="bg-white border border-gray-300 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-[#2d3e50] text-white p-4 flex items-center gap-3">
-              <GraduationCap size={20} className="text-yellow-500" />
-              <h2 className="text-sm font-bold uppercase tracking-widest">Daftar Mahasiswa Terdaftar</h2>
-              <span className="ml-auto bg-yellow-500 text-[#2d3e50] px-2 py-0.5 text-[10px] font-black rounded-full">
+            <div className="bg-[#2d3e50] text-white p-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <GraduationCap size={20} className="text-yellow-500 shrink-0" />
+                <h2 className="text-xs md:text-sm font-bold uppercase tracking-widest">Daftar Mahasiswa Terdaftar</h2>
+              </div>
+              <span className="bg-yellow-500 text-[#2d3e50] px-2.5 py-1 text-[10px] font-black rounded-full whitespace-nowrap">
                 {students.length} Orang
               </span>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-50 border-b text-[10px] uppercase font-bold text-gray-500">
-                    <th className="p-4 text-left w-12 italic">#</th>
-                    <th className="p-4 text-left">NPM Mahasiswa</th>
-                    <th className="p-4 text-left">Nama Lengkap</th>
-                    <th className="p-4 text-center">Status IRS</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {students.length > 0 ? (
-                    students.map((std, idx) => (
-                      <tr key={std.id} className="hover:bg-blue-50/50 transition-colors">
-                        <td className="p-4 font-mono text-gray-400">{idx + 1}</td>
-                        <td className="p-4 font-bold text-gray-700">{std.npm}</td>
-                        <td className="p-4 uppercase text-gray-600 font-medium">{std.nama}</td>
-                        <td className="p-4 text-center">
-                          <span className={`px-2 py-1 rounded-sm text-[9px] font-black uppercase ${std.statusIrs === 'SETUJU' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-yellow-100 text-yellow-700 border border-yellow-200'
-                            }`}>
-                            {std.statusIrs}
-                          </span>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={4} className="p-12 text-center text-gray-400 italic">
-                        --- Belum ada mahasiswa yang mengambil kelas ini ---
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+
+            {/* TABEL MAHASISWA */}
+            <div className="w-full flex flex-col border-b border-gray-200">
+              {/* Grid Header */}
+              <div className="grid grid-cols-[1fr_5rem] md:grid-cols-[4rem_10rem_1fr_8rem] bg-gray-50 text-[10px] uppercase font-bold text-gray-500 border-b border-gray-200">
+                <div className="hidden md:flex p-3 md:p-4 border-r border-gray-100 justify-center items-center italic">#</div>
+                <div className="hidden md:flex p-3 md:p-4 border-r border-gray-100 justify-center items-center text-center">NPM Mahasiswa</div>
+                <div className="p-3 md:p-4 border-r border-gray-100 flex items-center">Nama Lengkap</div>
+                <div className="p-3 md:p-4 flex items-center justify-center text-center">Status IRS</div>
+              </div>
+
+              {/* Grid Body */}
+              <div className="flex flex-col text-xs md:text-sm text-gray-800">
+                {students.length > 0 ? (
+                  students.map((std, idx) => (
+                    <div key={std.id} className="grid grid-cols-[1fr_5rem] md:grid-cols-[4rem_10rem_1fr_8rem] border-b border-gray-100 hover:bg-blue-50/50 transition-colors last:border-b-0">
+
+                      {/* Nomor (Desktop) */}
+                      <div className="hidden md:flex p-3 md:p-4 font-mono text-gray-400 justify-center items-center border-r border-gray-100">
+                        {idx + 1}
+                      </div>
+
+                      {/* NPM (Desktop) */}
+                      <div className="hidden md:flex p-3 md:p-4 font-bold font-mono text-gray-700 justify-center items-center border-r border-gray-100 text-center">
+                        {std.npm}
+                      </div>
+
+                      {/* Nama & NPM (Mobile) */}
+                      <div className="p-3 md:p-4 border-r border-gray-100 flex flex-col justify-center">
+                        <span className="uppercase text-gray-800 font-medium leading-tight">{std.nama}</span>
+                        <span className="md:hidden font-mono text-[10px] font-bold text-gray-500 mt-1">
+                          {std.npm}
+                        </span>
+                      </div>
+
+                      {/* Status IRS */}
+                      <div className="p-3 md:p-4 flex items-center justify-center text-center">
+                        <span className={`px-2 py-1 rounded-sm text-[9px] font-black uppercase border ${std.statusIrs === 'SETUJU'
+                          ? 'bg-green-100 text-green-700 border-green-200'
+                          : 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                          }`}>
+                          {std.statusIrs}
+                        </span>
+                      </div>
+
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-12 text-center text-gray-400 italic font-mono text-xs">
+                    --- Belum ada mahasiswa yang mengambil kelas ini ---
+                  </div>
+                )}
+              </div>
             </div>
+
           </div>
         )}
       </div>

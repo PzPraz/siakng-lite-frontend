@@ -228,7 +228,7 @@ const EditClassPage = () => {
                   )}
                 </section>
 
-                {/* Jadwal - Diubah menjadi Input Dinamis Multi-Kolom */}
+                {/* Jadwal  */}
                 <section className="md:col-span-2 bg-gray-50 p-4 border border-gray-200">
                   <div className="flex justify-between items-center mb-3">
                     <label className="text-[10px] text-gray-500 uppercase font-bold">

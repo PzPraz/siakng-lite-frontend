@@ -71,11 +71,9 @@ const FillStudyPlanPage = () => {
         } else {
             if (selectedClasses.some(s => s.courseId === cls.courseId)) {
                 const otherClasses = selectedClasses.filter(s => s.courseId !== cls.courseId);
-
                 setSelectedClasses([...otherClasses, cls]);
                 return;
             }
-
             setSelectedClasses([...selectedClasses, cls]);
         }
     };
@@ -117,151 +115,164 @@ const FillStudyPlanPage = () => {
                 rightContent={
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="flex items-center text-[11px] font-bold uppercase bg-gray-700 hover:bg-gray-600 px-3 py-1 border border-gray-800 transition-all text-white"
+                        className="flex items-center text-[11px] font-bold uppercase bg-gray-700 hover:bg-gray-600 px-3 py-1.5 border border-gray-800 transition-all text-white shadow-sm"
                     >
                         <ArrowLeft size={14} className="mr-2" /> Batal
                     </button>
                 }
             />
 
-            <div className="max-w-[1200px] mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="max-w-[1200px] mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 relative">
+
                 {/* KOLOM KIRI: Daftar Kelas per Mata Kuliah */}
-                <div className="lg:col-span-3 space-y-6">
+                <div className="lg:col-span-3 space-y-6 md:space-y-8 order-2 lg:order-1">
                     {error && (
-                        <div className="bg-red-50 border border-red-200 p-3 text-red-700 text-xs font-mono flex items-center gap-2">
-                            <AlertCircle size={14} /> {error.toUpperCase()}
+                        <div className="bg-red-50 border border-red-200 p-3 md:p-4 text-red-700 text-xs md:text-sm font-mono flex items-center gap-3 shadow-sm rounded-md">
+                            <AlertCircle size={18} className="shrink-0" /> {error.toUpperCase()}
                         </div>
                     )}
 
                     {Object.keys(groupedClasses).length === 0 ? (
-                        <div className="bg-white border border-gray-300 shadow-sm p-20 flex flex-col items-center justify-center text-center">
+                        <div className="bg-white border border-gray-300 shadow-sm p-10 md:p-20 flex flex-col items-center justify-center text-center">
                             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                                 <Info size={32} className="text-gray-300" />
                             </div>
                             <h3 className="text-sm font-bold uppercase text-gray-800 tracking-wider">
                                 Tidak Ada Perkuliahan Tersedia
                             </h3>
-                            <p className="text-[11px] text-gray-500 mt-2 max-w-[300px] leading-relaxed italic uppercase font-medium">
+                            <p className="text-[11px] md:text-xs text-gray-500 mt-2 max-w-[300px] leading-relaxed italic uppercase font-medium">
                                 Saat ini belum ada jadwal kelas yang dibuka untuk periode ini. Silakan hubungi bagian administrasi akademik.
                             </p>
                             <button
                                 onClick={() => navigate('/dashboard')}
-                                className="mt-6 px-4 py-2 border border-gray-800 text-[10px] font-bold uppercase hover:bg-gray-800 hover:text-white transition-all"
+                                className="mt-6 px-4 md:px-6 py-2 md:py-2.5 border border-gray-800 text-[10px] md:text-[11px] font-bold uppercase hover:bg-gray-800 hover:text-white transition-all"
                             >
                                 Kembali ke Dashboard
                             </button>
                         </div>
                     ) : (
                         Object.values(groupedClasses).map((group) => (
-                            <div key={group.nama} className="bg-white border border-gray-300 shadow-sm overflow-hidden">
-                                <div className="bg-[#2d3e50] text-white p-2 px-4 flex justify-between items-center">
+                            <div key={group.nama} className="bg-white border border-gray-300 shadow-sm overflow-hidden flex flex-col">
+                                {/* Header Mata Kuliah */}
+                                <div className="bg-[#2d3e50] text-white p-3 md:p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                                     <div className="flex items-center gap-3">
-                                        <span className="bg-yellow-500 text-[#2d3e50] px-2 py-0.5 font-bold text-[10px] font-mono">{group.kode}</span>
-                                        <h2 className="font-bold uppercase text-[12px] tracking-tight">{group.nama}</h2>
+                                        <span className="bg-yellow-500 text-[#2d3e50] px-2 py-0.5 font-bold text-[10px] font-mono shrink-0">
+                                            {group.sks} SKS
+                                        </span>
+                                        <h2 className="font-bold uppercase text-xs md:text-sm tracking-tight leading-tight">
+                                            {group.nama}
+                                        </h2>
                                     </div>
-                                    <span className="text-[10px] opacity-70 font-bold italic">{group.sks} SKS</span>
                                 </div>
 
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left border-collapse table-fixed">
-                                        <colgroup>
-                                            <col style={{ width: '72px' }} />
-                                            <col style={{ width: '25%' }} />
-                                            <col style={{ width: '40%' }} />
-                                            <col style={{ width: '80px' }} />
-                                            <col style={{ width: '96px' }} />
-                                        </colgroup>
-                                        <thead className="bg-gray-50 border-b border-gray-200 text-[10px] uppercase text-gray-500 font-bold">
-                                            <tr>
-                                                <th className="p-3 text-center">Kelas</th>
-                                                <th className="p-3">Dosen</th>
-                                                <th className="p-3">Jadwal</th>
-                                                <th className="p-3 text-center">Kuota</th>
-                                                <th className="p-3 text-center">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-100">
-                                            {group.classList.filter((cls) => cls.schedules.length > 0).map((cls) => {
-                                                const isSelected = selectedClasses.find(s => s.id === cls.id);
-                                                const isFull = cls.terisi >= cls.kapasitas;
-                                                return (
-                                                    <tr key={cls.id} className={`hover:bg-gray-50 transition-colors ${isSelected ? 'bg-blue-50/50' : ''}`}>
-                                                        <td className="p-3 text-center font-black text-blue-700 text-lg">{cls.namaKelas}</td>
-                                                        <td className="p-3 text-[11px] font-bold text-gray-600 uppercase italic truncate">{cls.namaDosen || 'Staf Pengajar'}</td>
+                                {/* TABEL KELAS */}
+                                <div className="w-full flex flex-col">
+                                    {/* Grid Header */}
+                                    <div className="grid grid-cols-[3.5rem_1fr_3.5rem_4.5rem] md:grid-cols-[5rem_1.5fr_2fr_5rem_6rem] bg-gray-50 text-[9px] md:text-[10px] uppercase font-bold text-gray-500 border-b border-gray-200">
+                                        <div className="p-2 md:p-3 border-r border-gray-200 flex items-center justify-center text-center">Kelas</div>
+                                        <div className="hidden md:flex items-center p-3 border-r border-gray-200">Dosen</div>
+                                        <div className="p-2 md:p-3 border-r border-gray-200 flex items-center justify-center">Jadwal</div>
+                                        <div className="p-2 md:p-3 border-r border-gray-200 flex items-center justify-center text-center">Kuota</div>
+                                        <div className="p-2 md:p-3 flex items-center justify-center text-center">Aksi</div>
+                                    </div>
 
-                                                        <td className="p-3 text-[10px] font-mono text-gray-500 uppercase align-top">
-                                                            {cls.schedules && Array.isArray(cls.schedules) && cls.schedules.length > 0 ? (
-                                                                <ul className="space-y-1">
-                                                                    {cls.schedules.map((sched: any, idx: number) => (
-                                                                        <li key={idx} className="flex items-start gap-1">
-                                                                            <span className="text-blue-400 mr-1">•</span>
-                                                                            {typeof sched === 'object' && sched !== null ? (
-                                                                                <span>
-                                                                                    <strong className="text-gray-700">{getHariName(sched.hari)}</strong>, {sched.jamMulai}-{sched.jamSelesai} ({sched.ruangan})
-                                                                                </span>
-                                                                            ) : (
-                                                                                <span>{sched}</span> // Fallback
-                                                                            )}
-                                                                        </li>
-                                                                    ))}
-                                                                </ul>
-                                                            ) : (
-                                                                <span className="text-gray-400 italic">TBA</span>
-                                                            )}
-                                                        </td>
+                                    {/* Grid Body */}
+                                    <div className="text-gray-800 flex flex-col">
+                                        {group.classList.filter((cls) => cls.schedules.length > 0).map((cls) => {
+                                            const isSelected = selectedClasses.find(s => s.id === cls.id);
+                                            const isFull = cls.terisi >= cls.kapasitas;
+                                            return (
+                                                <div key={cls.id} className={`grid grid-cols-[3.5rem_1fr_3.5rem_4.5rem] md:grid-cols-[5rem_1.5fr_2fr_5rem_6rem] border-b border-gray-100 transition-colors last:border-b-0 ${isSelected ? 'bg-blue-50/70' : 'hover:bg-gray-50'}`}>
 
-                                                        <td className="p-3 text-center text-[11px]">
-                                                            <span className={`font-bold ${isFull ? 'text-red-600' : 'text-gray-700'}`}>
-                                                                {cls.terisi}/{cls.kapasitas}
-                                                            </span>
-                                                        </td>
-                                                        <td className="p-3 text-center">
-                                                            <button
-                                                                onClick={() => toggleClass(cls)}
-                                                                disabled={isFull && !isSelected}
-                                                                className={`w-full py-1.5 text-[10px] font-bold uppercase border transition-all ${isSelected
-                                                                    ? 'bg-red-600 text-white border-red-700'
-                                                                    : isFull
-                                                                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                                                                        : 'bg-white text-blue-700 border-blue-700 hover:bg-blue-700 hover:text-white'
-                                                                    }`}
-                                                            >
-                                                                {isSelected ? 'Batal' : isFull ? 'Penuh' : 'Ambil'}
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </table>
+                                                    {/* Kelas */}
+                                                    <div className="p-2 md:p-3 flex items-center justify-center text-center font-black text-blue-700 text-base md:text-lg border-r border-gray-100">
+                                                        {cls.namaKelas}
+                                                    </div>
+
+                                                    {/* Dosen */}
+                                                    <div className="hidden md:flex p-3 border-r border-gray-100 items-center">
+                                                        <span className="text-[11px] font-bold text-gray-600 uppercase italic leading-tight">
+                                                            {cls.namaDosen || 'Staf Pengajar'}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Jadwal */}
+                                                    <div className="p-2 md:p-3 border-r border-gray-100 flex items-center font-mono text-[9px] md:text-[10px] uppercase text-gray-500 align-top">
+                                                        {cls.schedules && Array.isArray(cls.schedules) && cls.schedules.length > 0 ? (
+                                                            <ul className="space-y-1 w-full pl-2 md:pl-0">
+                                                                {cls.schedules.map((sched: any, idx: number) => (
+                                                                    <li key={idx} className="flex items-start gap-1 leading-tight list-none md:list-item md:ml-4">
+                                                                        <span className="text-blue-400 mr-1 md:hidden">•</span>
+                                                                        {typeof sched === 'object' && sched !== null ? (
+                                                                            <span>
+                                                                                <strong className="text-gray-700">{getHariName(sched.hari)}</strong>, {sched.jamMulai}-{sched.jamSelesai} <span className="text-blue-600 font-bold whitespace-nowrap">({sched.ruangan})</span>
+                                                                            </span>
+                                                                        ) : (
+                                                                            <span>{sched}</span> // Fallback
+                                                                        )}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        ) : (
+                                                            <span className="text-gray-400 italic pl-2 md:pl-4">TBA</span>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Kuota */}
+                                                    <div className="p-2 md:p-3 border-r border-gray-100 flex flex-col items-center justify-center text-center">
+                                                        <span className={`font-bold text-[10px] md:text-[11px] ${isFull ? 'text-red-600' : 'text-gray-700'}`}>
+                                                            {cls.terisi}/{cls.kapasitas}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Aksi */}
+                                                    <div className="p-2 md:p-3 flex items-center justify-center">
+                                                        <button
+                                                            onClick={() => toggleClass(cls)}
+                                                            disabled={isFull && !isSelected}
+                                                            className={`w-full py-1.5 md:py-2 text-[9px] md:text-[10px] font-bold uppercase border transition-all shadow-sm active:translate-y-px ${isSelected
+                                                                ? 'bg-red-600 text-white border-red-700 hover:bg-red-700'
+                                                                : isFull
+                                                                    ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                                                                    : 'bg-white text-blue-700 border-blue-700 hover:bg-blue-700 hover:text-white'
+                                                                }`}
+                                                        >
+                                                            {isSelected ? 'Batal' : isFull ? 'Penuh' : 'Ambil'}
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         )))}
                 </div>
 
                 {/* KOLOM KANAN: Sidebar Ringkasan & Submit */}
-                <div className="lg:col-span-1">
-                    <div className="bg-white border border-gray-300 sticky top-6 shadow-sm">
+                <div className="lg:col-span-1 order-1 lg:order-2">
+                    <div className="bg-white border border-gray-300 lg:sticky lg:top-6 shadow-sm flex flex-col">
                         <div className="bg-[#2d3e50] text-white p-3 font-bold uppercase text-[11px] flex items-center gap-2">
                             <CheckCircle2 size={14} className="text-yellow-500" /> Ringkasan IRS
                         </div>
 
-                        <div className="p-4">
+                        <div className="p-4 flex flex-col">
                             {selectedClasses.length === 0 ? (
-                                <div className="py-10 text-center text-gray-400 italic text-[11px]">
+                                <div className="py-10 md:py-16 text-center text-gray-400 italic text-[11px]">
                                     Belum ada mata kuliah dipilih
                                 </div>
                             ) : (
-                                <div className="space-y-4 max-h-[450px] overflow-y-auto mb-4 pr-2 custom-scrollbar">
+                                <div className="space-y-4 max-h-[300px] md:max-h-[450px] overflow-y-auto mb-4 pr-2 custom-scrollbar">
                                     {selectedClasses.map((cls) => (
-                                        <div key={`summary-${cls.id}`} className="group border-b border-gray-100 pb-2 flex justify-between items-start">
-                                            <div>
+                                        <div key={`summary-${cls.id}`} className="group border-b border-gray-100 pb-3 flex justify-between items-start">
+                                            <div className="pr-2">
                                                 <p className="font-bold text-gray-800 text-[11px] uppercase leading-tight">{cls.namaMatkul}</p>
                                                 <p className="text-[10px] text-blue-600 mt-1 font-mono font-bold">KELAS {cls.namaKelas} • {cls.sks} SKS</p>
                                             </div>
                                             <button
                                                 onClick={() => toggleClass(cls)}
-                                                className="text-gray-300 hover:text-red-600 transition-colors"
+                                                className="text-gray-300 hover:text-red-600 transition-colors p-1"
                                                 title="Hapus"
                                             >
                                                 <Trash2 size={14} />
@@ -271,20 +282,20 @@ const FillStudyPlanPage = () => {
                                 </div>
                             )}
 
-                            <div className="border-t pt-4 space-y-4">
-                                <div className="flex justify-between items-center">
+                            <div className="border-t border-gray-200 pt-4 space-y-4 mt-auto">
+                                <div className="flex justify-between items-center bg-gray-50 p-2 border border-gray-100 rounded-sm">
                                     <span className="text-gray-500 uppercase text-[10px] font-bold">Beban SKS</span>
                                     <span className={`text-lg font-black ${totalSKS > 24 ? 'text-red-600' : 'text-blue-700'}`}>
-                                        {totalSKS} / 24
+                                        {totalSKS} <span className="text-xs text-gray-400">/ 24</span>
                                     </span>
                                 </div>
 
                                 <button
                                     onClick={handleSubmitIRS}
                                     disabled={submitting || totalSKS > 24}
-                                    className={`w-full py-3 flex items-center justify-center gap-2 font-bold uppercase text-[11px] border transition-all ${submitting || totalSKS > 24
+                                    className={`w-full py-3 flex items-center justify-center gap-2 font-bold uppercase text-[11px] border transition-all shadow-sm ${submitting || totalSKS > 24
                                         ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                                        : 'bg-green-600 text-white border-green-700 hover:bg-green-700 shadow-sm active:translate-y-px'
+                                        : 'bg-green-600 text-white border-green-700 hover:bg-green-700 active:scale-95'
                                         }`}
                                 >
                                     {submitting ? <Loader2 size={14} className="animate-spin" /> : "Simpan Perubahan"}
@@ -295,13 +306,14 @@ const FillStudyPlanPage = () => {
                         <div className="bg-blue-50 p-3 border-t border-blue-100">
                             <div className="flex gap-2 items-start">
                                 <Info size={14} className="text-blue-600 mt-0.5 shrink-0" />
-                                <p className="text-[9px] text-blue-700 leading-normal italic uppercase font-medium">
+                                <p className="text-[9px] md:text-[10px] text-blue-700 leading-normal italic uppercase font-medium">
                                     Klik "Simpan" untuk memperbarui IRS. Pastikan tidak ada jadwal yang bentrok.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     );

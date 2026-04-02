@@ -52,7 +52,7 @@ const DashboardPage = () => {
 
               <button
                 onClick={handleLogout}
-                className="hover:bg-gray-300 px-3 py-1 border border-red-800 active:translate-y-px transition-all"
+                className="hover:bg-gray-300 px-3 py-1 border border-grey-800 active:translate-y-px transition-all"
               >
                 Logout
               </button>

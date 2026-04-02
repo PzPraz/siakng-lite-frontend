@@ -46,7 +46,6 @@ const CourseDetailPage = () => {
     }
   };
 
-
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-[#f3f3f3]">
       <Loader2 className="animate-spin text-blue-700" size={32} />
@@ -54,7 +53,7 @@ const CourseDetailPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#f3f3f3] text-sm font-sans relative">
+    <div className="min-h-screen bg-[#f3f3f3] text-sm font-sans relative pb-20">
 
       {/* MODAL POPUP KONFIRMASI DELETE */}
       {isDeleteModalOpen && (
@@ -99,7 +98,7 @@ const CourseDetailPage = () => {
         rightContent={
           <button
             onClick={() => navigate('/courses')}
-            className="flex items-center text-[11px] font-bold uppercase bg-gray-700 hover:bg-gray-600 px-3 py-1 border border-gray-800 transition-all"
+            className="flex items-center text-[11px] font-bold uppercase bg-gray-700 hover:bg-gray-600 px-3 py-1 border border-gray-800 transition-all text-white"
           >
             <ArrowLeft size={14} className="mr-2" /> Kembali ke Daftar
           </button>
@@ -111,26 +110,26 @@ const CourseDetailPage = () => {
           <>
             {/* Kartu Informasi Utama */}
             <div className="bg-white border border-gray-300 shadow-sm">
-              <div className="bg-[#f8f8f8] border-b border-gray-300 p-4 flex justify-between items-center">
+              <div className="bg-[#f8f8f8] border-b border-gray-300 p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <div className="flex items-center gap-3">
-                  <Info size={18} className="text-blue-700" />
+                  <Info size={18} className="text-blue-700 shrink-0" />
                   <h1 className="text-sm font-bold uppercase tracking-wide text-gray-800">
                     Identitas Mata Kuliah
                   </h1>
                 </div>
 
-                {/* EDIT & DELETE */}
+                {/* EDIT & DELETE BUTTONS */}
                 {user?.role === 'DOSEN' && (
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 w-full sm:w-auto">
                     <button
                       onClick={() => navigate(`/courses/edit/${id}`)}
-                      className="flex items-center gap-1.5 px-3 py-1 bg-white border border-gray-300 text-[10px] font-bold uppercase hover:bg-blue-50 text-blue-700 transition-all shadow-sm"
+                      className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-gray-300 text-[10px] font-bold uppercase hover:bg-blue-50 text-blue-700 transition-all shadow-sm"
                     >
                       <Edit size={12} /> Edit
                     </button>
                     <button
                       onClick={() => setIsDeleteModalOpen(true)}
-                      className="flex items-center gap-1.5 px-3 py-1 bg-white border border-red-200 text-[10px] font-bold uppercase hover:bg-red-50 text-red-600 transition-all shadow-sm"
+                      className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-red-200 text-[10px] font-bold uppercase hover:bg-red-50 text-red-600 transition-all shadow-sm"
                     >
                       <Trash2 size={12} /> Delete
                     </button>
@@ -138,25 +137,26 @@ const CourseDetailPage = () => {
                 )}
               </div>
 
-              <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Grid Information */}
+              <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
                 <section>
                   <label className="text-[10px] text-gray-400 uppercase font-bold block mb-1">Kode Matkul</label>
-                  <p className="text-xl font-mono font-black text-blue-900">{course.kode}</p>
+                  <p className="text-lg md:text-xl font-mono font-black text-blue-900">{course.kode}</p>
                 </section>
                 <section className="md:col-span-2">
                   <label className="text-[10px] text-gray-400 uppercase font-bold block mb-1">Nama Mata Kuliah</label>
-                  <p className="text-xl font-bold uppercase text-gray-800">{course.nama}</p>
+                  <p className="text-lg md:text-xl font-bold uppercase text-gray-800 leading-tight">{course.nama}</p>
                 </section>
                 <section>
                   <label className="text-[10px] text-gray-400 uppercase font-bold block mb-1">Bobot Kredit</label>
-                  <p className="text-lg font-bold text-gray-700">{course.sks} SKS</p>
+                  <p className="text-base md:text-lg font-bold text-gray-700">{course.sks} SKS</p>
                 </section>
               </div>
             </div>
 
-
+            {/* Tabel Daftar Kelas */}
             <div className="bg-white border border-gray-300 shadow-sm">
-              <div className="bg-[#f8f8f8] border-b border-gray-300 p-4 flex justify-between items-center">
+              <div className="bg-[#f8f8f8] border-b border-gray-300 p-4 flex flex-wrap justify-between items-center gap-3">
                 <div className="flex items-center gap-3">
                   <h2 className="text-sm font-bold uppercase tracking-wide text-gray-800">
                     Daftar Kelas yang Dibuka
@@ -168,28 +168,30 @@ const CourseDetailPage = () => {
                   </button>
                 )}
               </div>
-              <div className="p-6">
-                {/* Tabel Kelas */}
-                <table className="w-full border-collapse border border-gray-200">
-                  <thead>
-                    <tr className="bg-gray-50 text-[10px] uppercase font-bold text-gray-500">
-                      <th className="border border-gray-200 p-2 text-center">Kelas</th>
-                      <th className="border border-gray-200 p-2">Jadwal Perkuliahan</th>
-                      <th className="border border-gray-200 p-2 text-center">Kapasitas</th>
-                      <th className="border border-gray-200 p-2 text-center">Dosen</th>
-                      <th className="border border-gray-200 p-2 text-center">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+
+              <div className="p-4 md:p-6">
+                <div className="w-full border border-gray-200 flex flex-col">
+                  {/* Grid Header */}
+                  <div className="grid grid-cols-[3rem_1fr_4rem] md:grid-cols-[5rem_2fr_5rem_1fr_5rem] bg-gray-50 text-[10px] uppercase font-bold text-gray-500 border-b border-gray-200">
+                    <div className="p-3 border-r border-gray-200 text-center">Kelas</div>
+                    <div className="p-3 border-r border-gray-200">Jadwal Perkuliahan</div>
+                    <div className="hidden md:flex items-center justify-center p-3 border-r border-gray-200 text-center">Kapasitas</div>
+                    <div className="hidden md:flex items-center justify-center p-3 border-r border-gray-200 text-center">Dosen</div>
+                    <div className="p-3 text-center">Aksi</div>
+                  </div>
+
+                  {/* Grid Body */}
+                  <div className="text-gray-800 flex flex-col">
                     {course.classes && course.classes.length > 0 ? (
                       course.classes.map((cls) => (
-                        <tr key={cls.id} className="hover:bg-blue-50 transition-colors border-b border-gray-200 text-[12px]">
-                          <td className="border border-gray-300 p-3 text-center font-black text-blue-800 uppercase">
+                        <div key={cls.id} className="grid grid-cols-[3rem_1fr_4rem] md:grid-cols-[5rem_2fr_5rem_1fr_5rem] hover:bg-blue-50 transition-colors border-b border-gray-200 text-[12px] last:border-b-0">
+                          <div className="border-r border-gray-200 p-3 flex items-center justify-center text-center font-black text-blue-800 uppercase">
                             {cls.namaKelas}
-                          </td>
-                          <td className="border border-gray-300 p-3 font-mono uppercase text-gray-600">
+                          </div>
+
+                          <div className="border-r border-gray-200 p-3 font-mono uppercase text-gray-600 flex items-center">
                             {cls.schedules && cls.schedules.length > 0 ? (
-                              <ul className="list-disc pl-4">
+                              <ul className="list-disc pl-4 space-y-1">
                                 {cls.schedules.map((sched, index) => {
                                   if (typeof sched === 'object' && sched !== null) {
                                     const getHariName = (hariNum: number) => {
@@ -198,7 +200,7 @@ const CourseDetailPage = () => {
                                     };
                                     return (
                                       <li key={index}>
-                                        {getHariName(sched.hari)}, {sched.jamMulai} - {sched.jamSelesai} ({sched.ruangan})
+                                        <span className="font-bold text-gray-800">{getHariName(sched.hari)}</span>, {sched.jamMulai} - {sched.jamSelesai} ({sched.ruangan})
                                       </li>
                                     );
                                   }
@@ -209,34 +211,32 @@ const CourseDetailPage = () => {
                                 })}
                               </ul>
                             ) : (
-                              'BELUM DIATUR'
+                              <span className="text-gray-400 italic">BELUM DIATUR</span>
                             )}
-                          </td>
+                          </div>
 
-                          <td className="border border-gray-300 p-3 text-center font-bold">
+                          <div className="hidden md:flex border-r border-gray-200 p-3 items-center justify-center font-bold">
                             {cls.kapasitas}
-                          </td>
+                          </div>
 
-                          <td className="border border-gray-300 p-3 text-center font-bold">
+                          <div className="hidden md:flex border-r border-gray-200 p-3 items-center justify-center text-center font-bold text-blue-800">
                             {cls.namaDosen || 'BELUM DIATUR'}
-                          </td>
+                          </div>
 
-                          <td className="border border-gray-300 p-3 text-center">
+                          <div className="p-3 flex items-center justify-center text-center">
                             <button onClick={() => navigate(`/class/${cls.id}`)} className="text-[10px] uppercase font-bold text-gray-500 hover:text-blue-700 underline decoration-dotted">
                               Detail
                             </button>
-                          </td>
-                        </tr>
+                          </div>
+                        </div>
                       ))
                     ) : (
-                      <tr>
-                        <td colSpan={4} className="p-8 text-center text-gray-400 italic text-[11px]">
-                          --- Belum ada kelas yang dibuat untuk periode ini ---
-                        </td>
-                      </tr>
+                      <div className="p-8 text-center text-gray-400 italic text-[11px]">
+                        --- Belum ada kelas yang dibuat untuk periode ini ---
+                      </div>
                     )}
-                  </tbody>
-                </table>
+                  </div>
+                </div>
               </div>
             </div>
           </>

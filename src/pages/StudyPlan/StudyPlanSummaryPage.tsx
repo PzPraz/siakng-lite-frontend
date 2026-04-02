@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { getMyIrs } from "../../api/irs";
 import { getAllClasses } from "../../api/classes";
-import { Loader2, ArrowLeft, AlertCircle } from "lucide-react";
+import { Loader2, ArrowLeft, AlertCircle, AlertTriangle } from "lucide-react";
 import { Header } from "../../components/layout/Header";
 import { useNavigate } from "react-router-dom";
 import type { MergedIrsData } from "../../types/api";
@@ -61,6 +61,28 @@ const StudyPlanSummaryPage = () => {
 		})) || []
 	);
 
+	// LOGIKA DETEKSI BENTROK
+	let hasOverlap = false;
+	for (let i = 0; i < flatSchedules.length; i++) {
+		for (let j = i + 1; j < flatSchedules.length; j++) {
+			const a = flatSchedules[i];
+			const b = flatSchedules[j];
+
+			if (a.hari === b.hari) {
+				const startA = timeToMinutes(a.jamMulai);
+				const endA = timeToMinutes(a.jamSelesai);
+				const startB = timeToMinutes(b.jamMulai);
+				const endB = timeToMinutes(b.jamSelesai);
+
+				if (startA < endB && endA > startB) {
+					hasOverlap = true;
+					break;
+				}
+			}
+		}
+		if (hasOverlap) break;
+	}
+
 	if (loading) return (
 		<div className="min-h-screen flex items-center justify-center bg-[#f3f3f3]">
 			<Loader2 className="animate-spin text-blue-700" size={32} />
@@ -111,12 +133,24 @@ const StudyPlanSummaryPage = () => {
 							</span>
 						</div>
 					</div>
-
 				</div>
 
 				{error && (
 					<div className="bg-rose-50 border border-rose-200 p-3 text-rose-700 text-xs font-mono flex items-center gap-2 rounded-lg">
 						<AlertCircle size={14} /> {error.toUpperCase()}
+					</div>
+				)}
+
+				{/* WARNING BENTROK */}
+				{hasOverlap && (
+					<div className="bg-amber-50 border border-amber-200 p-3 md:p-4 text-amber-800 text-xs md:text-sm font-sans flex items-start gap-3 shadow-sm rounded-lg animate-in fade-in slide-in-from-top-2">
+						<AlertTriangle size={20} className="shrink-0 mt-0.5 text-amber-600" />
+						<div>
+							<p className="font-bold uppercase tracking-wide mb-1 text-amber-900">Peringatan: Terdeteksi Jadwal Bentrok</p>
+							<p className="leading-relaxed opacity-90">
+								Sistem mendeteksi adanya tumpang tindih waktu pada jadwal kelas Anda. Hal ini mungkin terjadi jika ada penyesuaian jadwal oleh program studi setelah Anda mendaftar. Validasi ketat akan dilakukan pada saat proses penyetujuan IRS oleh Pembimbing Akademik.
+							</p>
+						</div>
 					</div>
 				)}
 
@@ -140,41 +174,67 @@ const StudyPlanSummaryPage = () => {
 
 				{/* KONTEN */}
 				<div className="bg-white rounded-xl shadow-sm border border-slate-200 min-h-[400px] overflow-hidden">
+
+					{/* TAB RINGKASAN IRS */}
 					{activeTab === 'irs' && (
-						<div className="overflow-x-auto p-1">
-							<table className="w-full text-left min-w-[700px]">
-								<thead className="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-wider border-b border-slate-200">
-									<tr>
-										<th className="p-3 w-12 text-center font-semibold">No</th>
-										<th className="p-3 w-24 font-semibold">Kode</th>
-										<th className="p-3 min-w-[200px] font-semibold">Mata Kuliah</th>
-										<th className="p-3 w-16 text-center font-semibold">Kelas</th>
-										<th className="p-3 w-16 text-center font-semibold">SKS</th>
-										<th className="p-3 w-40 font-semibold">Dosen</th>
-									</tr>
-								</thead>
-								<tbody className="divide-y divide-slate-100">
-									{mergedData.map((item, index) => (
-										<tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-											<td className="p-3 text-center text-slate-400">{index + 1}</td>
-											<td className="p-3 font-mono text-xs text-slate-500">{item.kodeMatkul}</td>
-											<td className="p-3 font-bold text-slate-800 uppercase">{item.namaMatkul}</td>
-											<td className="p-3 text-center font-black text-blue-600">{item.namaKelas}</td>
-											<td className="p-3 text-center font-bold text-slate-600">{item.sks}</td>
-											<td className="p-3 text-[11px] uppercase font-semibold text-slate-600 truncate max-w-[150px]">{item.namaDosen}</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
+						<div className="w-full flex flex-col">
+							{/* Grid Header */}
+							<div className="grid grid-cols-[1fr_4rem_3rem] md:grid-cols-[3rem_6rem_1fr_4.5rem_3.5rem_12rem] bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500 font-bold border-b border-slate-200">
+								<div className="hidden md:flex p-3 justify-center text-center border-r border-slate-200">No</div>
+								<div className="hidden md:flex p-3 border-r border-slate-200 items-center">Kode</div>
+								<div className="p-3 border-r border-slate-200 flex items-center">Mata Kuliah</div>
+								<div className="p-3 text-center border-r border-slate-200 flex items-center justify-center">Kelas</div>
+								<div className="p-3 text-center border-r border-slate-200 flex items-center justify-center">SKS</div>
+								<div className="hidden md:flex p-3 items-center">Dosen</div>
+							</div>
+
+							{/* Grid Body */}
+							<div className="flex flex-col text-sm text-slate-800">
+								{mergedData.map((item, index) => (
+									<div key={item.id} className="grid grid-cols-[1fr_4rem_3rem] md:grid-cols-[3rem_6rem_1fr_4.5rem_3.5rem_12rem] border-b border-slate-100 hover:bg-slate-50/80 transition-colors last:border-b-0">
+
+										<div className="hidden md:flex p-3 items-center justify-center text-center text-slate-400 border-r border-slate-100">
+											{index + 1}
+										</div>
+
+										<div className="hidden md:flex p-3 items-center font-mono text-[11px] text-slate-500 border-r border-slate-100">
+											{item.kodeMatkul}
+										</div>
+
+										<div className="p-3 flex flex-col justify-center border-r border-slate-100">
+											<span className="font-bold text-slate-800 uppercase leading-tight text-xs md:text-sm">{item.namaMatkul}</span>
+											<span className="md:hidden font-mono text-[10px] text-slate-500 mt-1">{item.kodeMatkul}</span>
+										</div>
+
+										<div className="p-3 flex items-center justify-center text-center font-black text-blue-600 border-r border-slate-100 text-xs md:text-sm">
+											{item.namaKelas}
+										</div>
+
+										<div className="p-3 flex items-center justify-center text-center font-bold text-slate-600 border-r border-slate-100 text-xs md:text-sm">
+											{item.sks}
+										</div>
+
+										<div className="hidden md:flex p-3 items-center text-[11px] uppercase font-semibold text-slate-600 truncate">
+											{item.namaDosen}
+										</div>
+
+									</div>
+								))}
+								{mergedData.length === 0 && (
+									<div className="p-10 text-center text-slate-400 italic font-mono text-[11px]">
+										-- Belum ada rencana studi yang diisi --
+									</div>
+								)}
+							</div>
 						</div>
 					)}
 
 					{activeTab === 'jadwal' && (
-						<div className="overflow-x-auto bg-slate-50/50">
+						<div className="overflow-x-auto bg-slate-50/50 custom-scrollbar">
 							<div className="min-w-[950px] font-sans">
 
 								{/* Header Kolom Hari */}
-								<div className="flex bg-white border-b border-slate-200 sticky top-0 z-30">
+								<div className="flex bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
 									<div className="w-16 shrink-0 border-r border-slate-100 flex flex-col items-center justify-center py-1.5 bg-white">
 										<span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Jam</span>
 									</div>
@@ -185,7 +245,7 @@ const StudyPlanSummaryPage = () => {
 									))}
 								</div>
 
-								{/* Grid Body */}
+								{/* Grid Body Jadwal (Visual) */}
 								<div className="flex relative pb-8">
 
 									{/* Kolom Jam (Kiri) */}

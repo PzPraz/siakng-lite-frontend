@@ -35,14 +35,14 @@ const CourseListPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#f3f3f3] text-sm font-sans">
+    <div className="min-h-screen bg-[#f3f3f3] text-sm font-sans pb-20">
       {/* Header */}
       <Header
         subtitle="Katalog Mata Kuliah Global"
         rightContent={
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center text-[11px] font-bold uppercase bg-gray-700 hover:bg-gray-600 px-3 py-1 border border-gray-800 transition-all text-white"
+            className="flex items-center text-[11px] font-bold uppercase bg-gray-700 hover:bg-gray-600 px-3 py-1 border border-gray-800 transition-all text-white shadow-sm"
           >
             <ArrowLeft size={14} className="mr-2" /> Dashboard
           </button>
@@ -59,14 +59,14 @@ const CourseListPage = () => {
               </h1>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               {/* Search Bar */}
-              <div className="relative">
+              <div className="relative flex-1 sm:flex-none">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Cari Nama/Kode..."
-                  className="pl-9 pr-3 py-1.5 border border-gray-300 focus:border-blue-500 outline-none text-[12px] w-full md:w-64 uppercase"
+                  className="pl-9 pr-3 py-1.5 border border-gray-300 focus:border-blue-500 outline-none text-[12px] w-full sm:w-64 uppercase"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -75,7 +75,7 @@ const CourseListPage = () => {
               {user?.role === 'DOSEN' && (
                 <button
                   onClick={() => navigate('/courses/create')}
-                  className="bg-green-700 hover:bg-green-800 text-white px-3 py-1.5 font-bold uppercase text-[11px] flex items-center gap-2 border border-green-900 active:translate-y-px"
+                  className="bg-green-700 hover:bg-green-800 text-white px-3 py-1.5 font-bold uppercase text-[11px] flex items-center justify-center gap-2 border border-green-900 active:translate-y-px"
                 >
                   <Plus size={14} /> Tambah Matkul
                 </button>
@@ -83,7 +83,8 @@ const CourseListPage = () => {
             </div>
           </div>
 
-          <div className="p-4 overflow-x-auto">
+          {/* Area Konten */}
+          <div className="p-4">
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-[12px] font-mono">
                 <strong>STATUS:</strong> {error}
@@ -96,40 +97,50 @@ const CourseListPage = () => {
                 <p className="font-mono text-[11px] uppercase tracking-widest">Sinkronisasi Data...</p>
               </div>
             ) : (
-              <table className="w-full border-collapse border border-gray-200 text-left">
-                <thead>
-                  <tr className="bg-gray-100 text-[11px] uppercase font-bold text-gray-600 tracking-wider">
-                    <th className="border border-gray-300 p-3 w-16 text-center">No</th>
-                    <th className="border border-gray-300 p-3 w-32">Kode</th>
-                    <th className="border border-gray-300 p-3">Nama Mata Kuliah</th>
-                    <th className="border border-gray-300 p-3 w-24 text-center">SKS</th>
-                    <th className="border border-gray-300 p-3 w-32 text-center">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-800">
+              <div className="w-full border border-gray-200 flex flex-col">
+                {/* Header Row  */}
+                <div className="grid grid-cols-[1fr_5rem] md:grid-cols-[4rem_8rem_1fr_6rem_8rem] bg-gray-100 text-[11px] uppercase font-bold text-gray-600 tracking-wider border-b border-gray-200">
+                  <div className="hidden md:flex items-center justify-center p-3 border-r border-gray-200">No</div>
+                  <div className="hidden md:flex items-center p-3 border-r border-gray-200">Kode</div>
+                  <div className="flex items-center p-3 border-r border-gray-200">Nama Mata Kuliah</div>
+                  <div className="hidden md:flex items-center justify-center p-3 border-r border-gray-200">SKS</div>
+                  <div className="flex items-center justify-center p-3">Aksi</div>
+                </div>
+
+                {/* Body Rows  */}
+                <div className="text-gray-800 flex flex-col">
                   {filteredCourses.length > 0 ? (
                     filteredCourses.map((course, index) => (
-                      <tr key={course.id} className="hover:bg-blue-50 transition-colors border-b border-gray-200">
-                        <td className="border border-gray-300 p-3 text-center font-mono text-gray-500">{index + 1}</td>
-                        <td className="border border-gray-300 p-3 font-mono font-bold text-blue-800 uppercase">{course.kode}</td>
-                        <td className="border border-gray-300 p-3 font-bold uppercase">{course.nama}</td>
-                        <td className="border border-gray-300 p-3 text-center font-bold">{course.sks}</td>
-                        <td className="border border-gray-300 p-3 text-center">
-                          <button className="text-[10px] uppercase font-bold text-gray-500 hover:text-blue-700 underline decoration-dotted" onClick={() => navigate(`${course.id}`)}>
+                      <div key={course.id} className="grid grid-cols-[1fr_5rem] md:grid-cols-[4rem_8rem_1fr_6rem_8rem] hover:bg-blue-50 transition-colors border-b border-gray-200 last:border-b-0">
+                        <div className="hidden md:flex items-center justify-center p-3 border-r border-gray-200 font-mono text-gray-500">
+                          {index + 1}
+                        </div>
+                        <div className="hidden md:flex items-center p-3 border-r border-gray-200 font-mono font-bold text-blue-800 uppercase">
+                          {course.kode}
+                        </div>
+                        <div className="flex items-center p-3 border-r border-gray-200 font-bold uppercase text-[12px] md:text-sm">
+                          {course.nama}
+                        </div>
+                        <div className="hidden md:flex items-center justify-center p-3 border-r border-gray-200 font-bold">
+                          {course.sks}
+                        </div>
+                        <div className="flex items-center justify-center p-3">
+                          <button
+                            className="text-[10px] uppercase font-bold text-gray-500 hover:text-blue-700 underline decoration-dotted"
+                            onClick={() => navigate(`${course.id}`)}
+                          >
                             Detail
                           </button>
-                        </td>
-                      </tr>
+                        </div>
+                      </div>
                     ))
                   ) : (
-                    <tr>
-                      <td colSpan={5} className="p-10 text-center text-gray-400 italic font-mono text-[12px]">
-                        --- Tidak ada data mata kuliah ditemukan ---
-                      </td>
-                    </tr>
+                    <div className="p-10 text-center text-gray-400 italic font-mono text-[12px]">
+                      --- Tidak ada data mata kuliah ditemukan ---
+                    </div>
                   )}
-                </tbody>
-              </table>
+                </div>
+              </div>
             )}
           </div>
 

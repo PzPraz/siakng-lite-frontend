@@ -119,8 +119,8 @@ const LoginPage = () => {
                 type="submit"
                 disabled={isLoading}
                 className={`w-full py-2 text-xs font-bold uppercase tracking-widest transition-colors duration-200 rounded-none border-b-4 border-yellow-600 active:border-b-0 active:mt-1 flex justify-center items-center ${isLoading
-                    ? 'bg-gray-500 border-gray-700 cursor-not-allowed text-gray-200'
-                    : 'bg-[#2c2c2c] text-white hover:bg-black'
+                  ? 'bg-gray-500 border-gray-700 cursor-not-allowed text-gray-200'
+                  : 'bg-[#2c2c2c] text-white hover:bg-black'
                   }`}
               >
                 {isLoading ? (

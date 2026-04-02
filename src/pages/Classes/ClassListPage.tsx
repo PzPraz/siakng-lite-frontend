@@ -54,7 +54,7 @@ const ClassListPage = () => {
         rightContent={
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center text-[11px] font-bold uppercase bg-gray-700 hover:bg-gray-600 px-3 py-1 border border-gray-800 transition-all text-white"
+            className="flex items-center text-[11px] font-bold uppercase bg-gray-700 hover:bg-gray-600 px-3 py-1 border border-gray-800 transition-all text-white shadow-sm"
           >
             <ArrowLeft size={14} className="mr-2" /> Dashboard
           </button>
@@ -63,7 +63,7 @@ const ClassListPage = () => {
 
       <div className="max-w-[1200px] mx-auto p-4 md:p-8">
         {/* Filter Toolbar */}
-        <div className="bg-white border border-gray-300 p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
+        <div className="bg-white border border-gray-300 p-4 mb-6 flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-sm">
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-bold uppercase tracking-wide">Daftar Kelas</h1>
           </div>
@@ -85,111 +85,104 @@ const ClassListPage = () => {
             MENYINGKRONKAN JADWAL...
           </div>
         ) : error ? (
-          <div className="bg-red-50 border border-red-200 p-4 text-red-700 font-mono text-xs uppercase">{error}</div>
+          <div className="bg-red-50 border border-red-200 p-4 text-red-700 font-mono text-xs uppercase shadow-sm">{error}</div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             {courseNames.length > 0 ? courseNames.map((courseName) => {
               const group = groupedClasses[courseName];
               return (
-                <div key={courseName} className="bg-white border border-gray-300 shadow-sm overflow-hidden">
-                  {/* Course Header Section */}
-                  <div className="bg-[#2d3e50] text-white p-3 flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                      <span className="bg-yellow-500 text-[#2d3e50] px-2 py-0.5 font-mono font-bold text-xs">
-                        {group.courseInfo.kode}
-                      </span>
-                      <h2 className="font-bold uppercase tracking-tight text-sm">
+                <div key={courseName} className="bg-white border border-gray-300 shadow-sm flex flex-col">
+                  {/* Course Header Section - Responsive */}
+                  <div className="bg-[#2d3e50] text-white p-3 flex justify-between items-center gap-3">
+                    <div className="flex items-center sm:items-center gap-3">
+                      <h2 className="font-bold uppercase tracking-tight text-sm leading-tight">
                         {group.courseInfo.nama}
                       </h2>
                     </div>
-                    <span className="text-[10px] font-bold uppercase opacity-80 border border-white/20 px-2 py-0.5">
+                    <span className="text-[10px] font-bold uppercase opacity-80 border border-white/20 px-2 py-1 self-start sm:self-auto shrink-0 whitespace-nowrap">
                       Bobot: {group.courseInfo.sks} SKS
                     </span>
                   </div>
 
-                  {/* Table of Classes */}
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse text-left min-w-[850px] table-fixed">
-                      <thead>
-                        <tr className="bg-gray-100 text-[10px] uppercase font-bold text-gray-500 border-b border-gray-200">
-                          <th className="p-3 w-[80px] text-center">Kelas</th>
-                          <th className="p-3 w-[250px]">Dosen Pengampu</th>
-                          <th className="p-3 w-auto text-center">Jadwal</th>
-                          <th className="p-3 w-[100px] text-center">Terisi</th>
-                          <th className="p-3 w-[100px] text-center">Kapasitas</th>
-                          <th className="p-3 w-[120px] text-center">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {group.classList.map((cls) => (
-                          <tr key={cls.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                            <td className="p-3 text-center font-black text-blue-800 text-lg border-r border-gray-50">{cls.namaKelas}</td>
+                  <div className="w-full flex flex-col">
+                    {/* Grid Header */}
+                    <div className="grid grid-cols-[3rem_1fr_4.5rem] md:grid-cols-[4rem_1.5fr_2fr_5rem_5rem_6rem] bg-gray-100 text-[10px] uppercase font-bold text-gray-500 border-b border-gray-200">
+                      <div className="p-3 text-center border-r border-gray-200">Kelas</div>
+                      <div className="hidden md:flex items-center p-3 border-r border-gray-200">Dosen Pengampu</div>
+                      <div className="p-3 border-r border-gray-200 flex items-center md:justify-center">Jadwal</div>
+                      <div className="hidden md:flex items-center justify-center p-3 border-r border-gray-200 text-center">Terisi</div>
+                      <div className="hidden md:flex items-center justify-center p-3 border-r border-gray-200 text-center">Kapasitas</div>
+                      <div className="p-3 flex items-center justify-center text-center">Aksi</div>
+                    </div>
 
-                            <td className="p-3 border-r border-gray-50">
-                              <div className="flex items-center gap-2">
-                                <span className="font-bold uppercase text-[11px] text-gray-700 leading-tight truncate">
-                                  {cls.namaDosen || 'Staf Pengajar'}
-                                </span>
-                              </div>
-                            </td>
+                    {/* Grid Body */}
+                    <div className="text-gray-800 flex flex-col">
+                      {group.classList.map((cls) => (
+                        <div key={cls.id} className="grid grid-cols-[3rem_1fr_4.5rem] md:grid-cols-[4rem_1.5fr_2fr_5rem_5rem_6rem] border-b border-gray-100 hover:bg-blue-50/30 transition-colors last:border-b-0">
 
-                            <td className="p-3 font-mono text-[11px] uppercase text-gray-600 text-center">
-                              {cls.schedules && cls.schedules.length > 0 ? (
-                                <ul className="list-disc pl-4 space-y-1">
-                                  {cls.schedules.map((sched, index) => {
-                                    if (typeof sched === 'object' && sched !== null) {
-                                      const getHariName = (hariNum: number) => {
-                                        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-                                        return days[hariNum] || 'Unknown';
-                                      };
-                                      return (
-                                        <li key={index} className="leading-tight list-none">
-                                          <span className="font-bold text-gray-800">{getHariName(sched.hari)}</span>, {sched.jamMulai} - {sched.jamSelesai} <span className="text-blue-600 font-bold">({sched.ruangan})</span>
-                                        </li>
-                                      );
-                                    }
-                                    else if (typeof sched === 'string') {
-                                      return <li key={index} className="leading-tight">{sched}</li>;
-                                    }
-                                    return null;
-                                  })}
-                                </ul>
-                              ) : (
-                                <span className="text-gray-400 italic">Belum Diatur</span>
-                              )}
-                            </td>
+                          <div className="p-3 flex items-center justify-center text-center font-black text-blue-800 text-sm md:text-lg border-r border-gray-100">
+                            {cls.namaKelas}
+                          </div>
 
-                            <td className="p-3 text-center border-l border-gray-50">
-                              <div className="flex flex-col items-center">
-                                <span className="font-bold text-lg text-gray-800 leading-none">{cls.terisi}</span>
-                                <span className="text-gray-400 text-[9px] uppercase mt-1">Kursi</span>
-                              </div>
-                            </td>
+                          <div className="hidden md:flex p-3 border-r border-gray-100 items-center">
+                            <span className="font-bold uppercase text-[11px] text-gray-700 leading-tight">
+                              {cls.namaDosen || 'Staf Pengajar'}
+                            </span>
+                          </div>
 
-                            <td className="p-3 text-center border-l border-gray-50">
-                              <div className="flex flex-col items-center">
-                                <span className="font-bold text-lg text-gray-800 leading-none">{cls.kapasitas}</span>
-                                <span className="text-gray-400 text-[9px] uppercase mt-1">Kursi</span>
-                              </div>
-                            </td>
+                          <div className="p-3 border-r border-gray-100 flex items-center font-mono text-[10px] md:text-[11px] uppercase text-gray-600">
+                            {cls.schedules && cls.schedules.length > 0 ? (
+                              <ul className="list-disc pl-3 md:pl-4 space-y-1">
+                                {cls.schedules.map((sched, index) => {
+                                  if (typeof sched === 'object' && sched !== null) {
+                                    const getHariName = (hariNum: number) => {
+                                      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                                      return days[hariNum] || 'Unknown';
+                                    };
+                                    return (
+                                      <li key={index} className="leading-tight list-none -ml-2 md:ml-0 md:list-item">
+                                        <span className="font-bold text-gray-800">{getHariName(sched.hari)}</span>, {sched.jamMulai}-{sched.jamSelesai} <span className="text-blue-600 font-bold whitespace-nowrap">({sched.ruangan})</span>
+                                      </li>
+                                    );
+                                  }
+                                  else if (typeof sched === 'string') {
+                                    return <li key={index} className="leading-tight list-none -ml-2 md:ml-0 md:list-item">{sched}</li>;
+                                  }
+                                  return null;
+                                })}
+                              </ul>
+                            ) : (
+                              <span className="text-gray-400 italic">Belum Diatur</span>
+                            )}
+                          </div>
 
-                            <td className="p-3 text-center border-l border-gray-50">
-                              <button
-                                onClick={() => navigate(`/class/${cls.id}`)}
-                                className="w-full text-[10px] font-bold uppercase text-blue-600 border border-blue-600 px-2 py-1.5 hover:bg-blue-600 hover:text-white transition-all shadow-sm active:translate-y-px"
-                              >
-                                Detail Kelas
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                          <div className="hidden md:flex p-3 border-r border-gray-100 flex-col items-center justify-center">
+                            <span className="font-bold text-lg text-gray-800 leading-none">{cls.terisi}</span>
+                            <span className="text-gray-400 text-[9px] uppercase mt-1">Kursi</span>
+                          </div>
+
+                          <div className="hidden md:flex p-3 border-r border-gray-100 flex-col items-center justify-center">
+                            <span className="font-bold text-lg text-gray-800 leading-none">{cls.kapasitas}</span>
+                            <span className="text-gray-400 text-[9px] uppercase mt-1">Kursi</span>
+                          </div>
+
+                          <div className="p-2 md:p-3 flex items-center justify-center">
+                            <button
+                              onClick={() => navigate(`/class/${cls.id}`)}
+                              className="w-full text-[9px] md:text-[10px] font-bold uppercase text-blue-600 border border-blue-600 px-1 py-1.5 md:px-2 md:py-2 hover:bg-blue-600 hover:text-white transition-all shadow-sm active:translate-y-px"
+                            >
+                              Detail
+                            </button>
+                          </div>
+
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               );
             }) : (
-              <div className="p-20 text-center border-2 border-dashed border-gray-300 text-gray-400 font-mono italic uppercase">
+              <div className="p-20 text-center border-2 border-dashed border-gray-300 bg-white text-gray-400 font-mono italic uppercase text-[11px]">
                 -- Tidak ada jadwal yang tersedia untuk kriteria pencarian ini --
               </div>
             )}

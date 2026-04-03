@@ -26,12 +26,14 @@ const StudyPlanSummaryPage = () => {
 					getAllClasses()
 				]);
 
-			const combinedData = irsResponse.map((irs: IrsResponse) => {
-				const classDetail = classesResponse.find((cls: ClassDetail) => cls.id === irs.classId);
+				const combinedData = irsResponse.map((irs: IrsResponse): MergedIrsData => {
+					const normalizedClassId = irs.classId ?? 0;
+					const classDetail = classesResponse.find((cls: ClassDetail) => cls.id === normalizedClassId);
+
 					return {
-						id: irs.id,
-						classId: irs.classId,
-						status: irs.status,
+						id: Number(irs.id),
+						classId: normalizedClassId,
+						status: irs.status ?? 'PENDING',
 						namaKelas: classDetail?.namaKelas || 'Unknown',
 						namaMatkul: classDetail?.namaMatkul || 'Mata Kuliah Tidak Ditemukan',
 						kodeMatkul: classDetail?.kodeMatkul || '-',

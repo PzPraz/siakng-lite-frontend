@@ -93,7 +93,7 @@ const CurrentClassesPage = () => {
 						) : (
 							<div className="w-full border border-gray-200 flex flex-col">
 								{/* Grid Header */}
-								<div className="grid grid-cols-[1fr_2fr_5rem] md:grid-cols-[1.5fr_2fr_4rem_5rem_6rem] bg-gray-100 text-[11px] uppercase font-bold text-gray-600 tracking-wider border-b border-gray-200">
+								<div className="grid grid-cols-[1fr_2fr_8rem] md:grid-cols-[1.5fr_2fr_4rem_5rem_8rem] bg-gray-100 text-[11px] uppercase font-bold text-gray-600 tracking-wider border-b border-gray-200">
 									<div className="p-3 border-r border-gray-200 flex items-center">Nama Mata Kuliah</div>
 									<div className="p-3 border-r border-gray-200 flex items-center">Jadwal</div>
 									<div className="hidden md:flex p-3 border-r border-gray-200 items-center justify-center text-center">SKS</div>
@@ -105,7 +105,7 @@ const CurrentClassesPage = () => {
 								<div className="text-gray-800 flex flex-col">
 									{filteredClasses.length > 0 ? (
 										filteredClasses.map((cls) => (
-											<div key={cls.id} className="grid grid-cols-[1fr_2fr_5rem] md:grid-cols-[1.5fr_2fr_4rem_5rem_6rem] hover:bg-blue-50 transition-colors border-b border-gray-200 last:border-b-0">
+											<div key={cls.id} className="grid grid-cols-[1fr_2fr_8rem] md:grid-cols-[1.5fr_2fr_4rem_5rem_8rem] hover:bg-blue-50 transition-colors border-b border-gray-200 last:border-b-0">
 
 												{/* Nama Matkul & Kelas */}
 												<div className="p-3 border-r border-gray-200 flex flex-col justify-center">
@@ -151,12 +151,18 @@ const CurrentClassesPage = () => {
 												</div>
 
 												{/* Aksi */}
-												<div className="p-3 flex items-center justify-center">
+												<div className="p-3 flex items-center justify-center gap-2">
 													<button
 														className="text-[10px] uppercase font-bold text-gray-500 hover:text-blue-700 underline decoration-dotted transition-colors"
 														onClick={() => navigate(`/class/${cls.id}`)}
 													>
 														Detail
+													</button>
+													<button
+														className="text-[10px] uppercase font-bold text-green-700 hover:text-green-800 underline decoration-dotted transition-colors"
+														onClick={() => navigate(`/class/${cls.id}/grades`)}
+													>
+														Nilai
 													</button>
 												</div>
 

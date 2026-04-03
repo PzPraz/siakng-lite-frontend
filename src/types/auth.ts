@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 export type UserRole = 'DOSEN' | 'MAHASISWA';
 
 export interface AuthUser {
+  id?: number | string;
   nama?: string;
   role?: UserRole;
   npm_atau_nip?: string;
@@ -28,6 +29,7 @@ export interface Student {
 }
 
 export interface UserData {
+  id?: number | string;
   nama?: string;
   role?: 'DOSEN' | 'MAHASISWA';
   npm?: string;
@@ -36,6 +38,7 @@ export interface UserData {
 }
 
 export interface LoginResponse {
+  id?: number;
   access_token?: string;
   user?: UserData;
   message?: string;

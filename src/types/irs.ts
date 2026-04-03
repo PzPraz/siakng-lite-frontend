@@ -18,4 +18,9 @@ export interface IrsResponse {
   classId?: number;
   status?: string;
   createdAt?: string;
+  namaKelas?: string;
+  namaMatkul?: string;
+  kodeMatkul?: string;
+  sks?: number;
+  nilaiAkhir?: string | number | null;
 }

@@ -12,7 +12,7 @@ export const MahasiswaServiceArea = () => {
         <h4 className="font-bold text-blue-800 group-hover:underline uppercase text-xs">Isi/Ubah IRS</h4>
         <p className="text-[11px] text-gray-500 mt-1">Lakukan pengisian Rencana Studi.</p>
       </div>
-      <div className="bg-white border border-gray-300 p-4 hover:border-blue-400 cursor-pointer group">
+      <div onClick={() => navigate('/my-grades')} className="bg-white border border-gray-300 p-4 hover:border-blue-400 cursor-pointer group">
         <h4 className="font-bold text-blue-800 group-hover:underline uppercase text-xs">Riwayat Akademik</h4>
         <p className="text-[11px] text-gray-500 mt-1">Melihat transkrip nilai, IPK, dan riwayat studi Anda.</p>
       </div>

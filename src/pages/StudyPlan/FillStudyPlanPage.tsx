@@ -7,11 +7,7 @@ import { getAllClasses } from '../../api/classes';
 import { syncIRS, getMyIrs } from '../../api/irs';
 import type { ClassDetail, ScheduleItem } from '../../types';
 import type { IrsResponse } from '../../types';
-
-const getHariName = (hariNum: number) => {
-    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    return days[hariNum] || 'Unknown';
-};
+import { getHariName } from '../../utils/helper';
 
 const FillStudyPlanPage = () => {
     const navigate = useNavigate();

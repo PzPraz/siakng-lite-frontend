@@ -202,7 +202,7 @@ const ClassDetailPage = () => {
               <div className="flex flex-col text-xs md:text-sm text-gray-800">
                 {students.length > 0 ? (
                   students.map((std, idx) => (
-                    <div key={std.id} className="grid grid-cols-[1fr_5rem] md:grid-cols-[4rem_10rem_1fr_8rem] border-b border-gray-100 hover:bg-blue-50/50 transition-colors last:border-b-0">
+                    <div key={std.id ?? std.npm} className="grid grid-cols-[1fr_5rem] md:grid-cols-[4rem_10rem_1fr_8rem] border-b border-gray-100 hover:bg-blue-50/50 transition-colors last:border-b-0">
 
                       {/* Nomor (Desktop) */}
                       <div className="hidden md:flex p-3 md:p-4 font-mono text-gray-400 justify-center items-center border-r border-gray-100">

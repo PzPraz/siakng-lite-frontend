@@ -13,6 +13,8 @@ import EditClassPage from './pages/Classes/EditClassPage.tsx';
 import ClassListPage from './pages/Classes/ClassListPage.tsx';
 import FillStudyPlanPage from './pages/StudyPlan/FillStudyPlanPage.tsx';
 import CurrentClassesPage from './pages/Dosen/CurrentClassesPage.tsx';
+import ClassGradesPage from './pages/Dosen/ClassGradesPage.tsx';
+import MyGradesPage from './pages/StudyPlan/MyGradesPage.tsx';
 import StudyPlanSummaryPage from './pages/StudyPlan/StudyPlanSummaryPage.tsx';
 import NotFoundPage from './pages/404/NotFoundPage.tsx';
 
@@ -125,7 +127,27 @@ function App() {
             }
           />
 
+          <Route
+            path="/class/:id/grades"
+            element={
+              <ProtectedRoute>
+                <ClassGradesPage />
+              </ProtectedRoute>
+            }
+          />
 
+
+        </Route>
+
+        <Route element={<RoleBasedRoute allowedRoles={['MAHASISWA']} />}>
+          <Route
+            path="/my-grades"
+            element={
+              <ProtectedRoute>
+                <MyGradesPage />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         {/* Redirect otomatis jika akses root '/' */}

@@ -19,3 +19,30 @@ export interface CreateGradeComponentDto {
     weight: number;
   }[];
 }
+
+export interface CreateGradeDto {
+  componentId: number;
+  value?: number;
+}
+
+export interface StudentGradeItem {
+  id?: number;
+  studentId: number;
+  componentId: number;
+  value: string;
+  component?: GradeComponent & {
+    classId?: number;
+    isPublished?: boolean;
+  };
+}
+
+export interface GradePerClassSummary {
+  classId: number;
+  kodeMatkul: string;
+  namaMatkul: string;
+  namaKelas: string;
+  sks: number;
+  nilaiAkhirNumerik: number;
+  nilaiHuruf: string;
+  bobot: number;
+}

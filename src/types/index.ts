@@ -11,4 +11,11 @@ export type { MergedIrsData, IrsResponse } from './irs';
 export type { UserRole, AuthUser, AuthContextValue, AuthProviderProps, Student, UserData, LoginResponse } from './auth';
 
 // Grades
-export type { GradeInputProps, GradeComponent, CreateGradeComponentDto } from './grade';
+export type {
+	GradeInputProps,
+	GradeComponent,
+	CreateGradeComponentDto,
+	CreateGradeDto,
+	StudentGradeItem,
+	GradePerClassSummary,
+} from './grade';

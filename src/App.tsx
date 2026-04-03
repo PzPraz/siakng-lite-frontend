@@ -70,6 +70,7 @@ function App() {
           }
         />
 
+
         <Route
           path="/course-plan/edit"
           element={
@@ -95,8 +96,8 @@ function App() {
             element={
               <CreateClassPage />
             }
-
           />
+          
           <Route
             path="/courses/edit/:id"
             element={

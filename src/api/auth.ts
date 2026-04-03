@@ -1,5 +1,5 @@
 import { API_BASE_URL } from './config';
-import type { LoginResponse } from '../types/api';
+import type { LoginResponse } from '../types';
 
 export type { LoginResponse };
 

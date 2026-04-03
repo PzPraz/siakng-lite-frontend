@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, CheckCircle2, AlertCircle, Trash2, Info, ArrowLeft } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 import { Header } from '../../components/layout/Header';
 import { getAllClasses } from '../../api/classes';
 import { syncIRS, getMyIrs } from '../../api/irs';
-import type { ClassDetail } from '../../types/api';
-import type { IrsResponse } from '../../types/api';
+import type { ClassDetail, ScheduleItem } from '../../types';
+import type { IrsResponse } from '../../types';
 
 const getHariName = (hariNum: number) => {
     const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -40,8 +40,7 @@ const FillStudyPlanPage = () => {
                 );
 
                 setSelectedClasses(initialSelected);
-            } catch (err: unknown) {
-                console.error(err instanceof Error ? err.message : "Gagal load data");
+            } catch {
                 setError("Gagal menyinkronkan data mata kuliah.");
             } finally {
                 setLoading(false);
@@ -200,7 +199,7 @@ const FillStudyPlanPage = () => {
                                                     <div className="p-2 md:p-3 border-r border-gray-100 flex items-center font-mono text-[9px] md:text-[10px] uppercase text-gray-500 align-top">
                                                         {cls.schedules && Array.isArray(cls.schedules) && cls.schedules.length > 0 ? (
                                                             <ul className="space-y-1 w-full pl-2 md:pl-0">
-                                                                {cls.schedules.map((sched: any, idx: number) => (
+                                                                {cls.schedules.map((sched: ScheduleItem, idx: number) => (
                                                                     <li key={idx} className="flex items-start gap-1 leading-tight list-none md:list-item md:ml-4">
                                                                         <span className="text-blue-400 mr-1 md:hidden">•</span>
                                                                         {typeof sched === 'object' && sched !== null ? (

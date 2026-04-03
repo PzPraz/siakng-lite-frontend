@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loader2, ArrowLeft, Plus, Search } from 'lucide-react';
 import { Header } from '../../components/layout/Header';
 import { getAllCourses, type Course } from '../../api/course';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 
 const CourseListPage = () => {
   const navigate = useNavigate();

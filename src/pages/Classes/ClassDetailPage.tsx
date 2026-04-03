@@ -5,9 +5,9 @@ import {
   AlertTriangle, UserCheck, GraduationCap, MapPin
 } from 'lucide-react';
 import { Header } from '../../components/layout/Header';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 import { getClassDetail, deleteClass, getStudentsInClass } from '../../api/classes';
-import type { Student, ClassDetail } from '../../types/api';
+import type { Student, ClassDetail, ScheduleItem } from '../../types';
 import { getHariName } from '../../utils/helper';
 
 const ClassDetailPage = () => {
@@ -23,32 +23,34 @@ const ClassDetailPage = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    if (id) fetchAllData(Number(id));
-  }, [id]);
+    const fetchAllData = async () => {
+      if (!id) return;
+      try {
+        setLoading(true);
+        const data = await getClassDetail(Number(id));
+        setClassData(data);
 
-  const fetchAllData = async (classId: number) => {
-    try {
-      setLoading(true);
-      const data = await getClassDetail(classId);
-      setClassData(data);
+        if (!data) {
+          navigate('/404', { replace: true });
+          return;
+        }
 
-      if (!data) {
-        navigate('/404', { replace: true });
-        return;
+        if (user?.role === 'DOSEN') {
+          const studentList = await getStudentsInClass(Number(id));
+          setStudents(studentList);
+        }
+      } catch {
+        navigate('/404')
+      } finally {
+        setLoading(false);
       }
+    };
 
-      if (user?.role === 'DOSEN') {
-        const studentList = await getStudentsInClass(classId);
-        setStudents(studentList);
-      }
-    } catch (err: unknown) {
-      navigate('/404')
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchAllData();
+  }, [id, user?.role, navigate]);
 
   const handleDelete = async () => {
+    if (!id) return;
     try {
       setIsDeleting(true);
       await deleteClass(Number(id));
@@ -132,7 +134,7 @@ const ClassDetailPage = () => {
               <label className="text-[10px] font-bold text-gray-400 uppercase">Jadwal & Sesi Perkuliahan</label>
               <div className="font-mono text-gray-700 flex flex-col gap-2">
                 {classData?.schedules && Array.isArray(classData.schedules) && classData.schedules.length > 0 ? (
-                  classData.schedules.map((sched: any, idx: number) => (
+                  classData.schedules.map((sched: ScheduleItem, idx: number) => (
                     <div key={idx} className="flex items-start gap-2 bg-gray-50 p-2 border border-gray-200 text-xs">
                       <Calendar size={14} className="mt-0.5 text-gray-400 shrink-0" />
                       <span>

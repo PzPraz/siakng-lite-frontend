@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/useAuth";
 import { getMyIrs } from "../../api/irs";
 import { getAllClasses } from "../../api/classes";
 import { Loader2, ArrowLeft, AlertCircle, AlertTriangle } from "lucide-react";
 import { Header } from "../../components/layout/Header";
 import { useNavigate } from "react-router-dom";
-import type { MergedIrsData } from "../../types/api";
+import type { MergedIrsData, IrsResponse, ClassDetail } from '../../types';
 import { timeToMinutes, getCourseColor } from "../../utils/helper";
 import { DAYS, END_HOUR, START_HOUR, HOURS, PIXELS_PER_MINUTE } from "../../utils/enum";
 
@@ -26,8 +26,8 @@ const StudyPlanSummaryPage = () => {
 					getAllClasses()
 				]);
 
-				const combinedData = irsResponse.map((irs: any) => {
-					const classDetail = classesResponse.find((cls: any) => cls.id === irs.classId);
+			const combinedData = irsResponse.map((irs: IrsResponse) => {
+				const classDetail = classesResponse.find((cls: ClassDetail) => cls.id === irs.classId);
 					return {
 						id: irs.id,
 						classId: irs.classId,
@@ -106,7 +106,7 @@ const StudyPlanSummaryPage = () => {
 			<div className="max-w-[1300px] mx-auto p-4 md:p-6 flex flex-col gap-6">
 
 				{/* PANEL INFORMASI MAHASISWA */}
-				<div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col md:flex-row justify-between md:items-center gap-4">
+				<div className="bg-white shadow-sm border border-slate-200 p-4 flex flex-col md:flex-row justify-between md:items-center gap-4">
 					<div className="flex flex-wrap gap-8">
 						<div>
 							<p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Nama Mahasiswa</p>
@@ -155,17 +155,17 @@ const StudyPlanSummaryPage = () => {
 				)}
 
 				{/* TAB NAVIGATION */}
-				<div className="flex bg-slate-100 p-1.5 gap-1 w-full max-w-sm rounded-lg border border-slate-200">
+				<div className="flex bg-slate-100 p-1.5 gap-1 w-full max-w-sm border border-slate-200">
 					<button
 						onClick={() => setActiveTab('jadwal')}
-						className={`flex-1 flex items-center justify-center gap-2 py-2 text-[11px] font-bold uppercase transition-all rounded-md ${activeTab === 'jadwal' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+						className={`flex-1 flex items-center justify-center gap-2 py-2 text-[11px] font-bold uppercase transition-all ${activeTab === 'jadwal' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
 							}`}
 					>
 						Jadwal
 					</button>
 					<button
 						onClick={() => setActiveTab('irs')}
-						className={`flex-1 flex items-center justify-center gap-2 py-2 text-[11px] font-bold uppercase transition-all rounded-md ${activeTab === 'irs' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+						className={`flex-1 flex items-center justify-center gap-2 py-2 text-[11px] font-bold uppercase transition-all  ${activeTab === 'irs' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
 							}`}
 					>
 						Ringkasan
@@ -173,7 +173,7 @@ const StudyPlanSummaryPage = () => {
 				</div>
 
 				{/* KONTEN */}
-				<div className="bg-white rounded-xl shadow-sm border border-slate-200 min-h-[400px] overflow-hidden">
+				<div className="bg-white shadow-sm border border-slate-200 min-h-[400px] overflow-hidden">
 
 					{/* TAB RINGKASAN IRS */}
 					{activeTab === 'irs' && (
@@ -297,7 +297,7 @@ const StudyPlanSummaryPage = () => {
 																	paddingBottom: '1px'
 																}}
 															>
-																<div className={`w-full h-full rounded shadow-sm border ${theme.border} ${theme.bg} overflow-hidden flex flex-col relative`}>
+																<div className={`w-full h-full shadow-sm border ${theme.border} ${theme.bg} overflow-hidden flex flex-col relative`}>
 																	<div className={`absolute left-0 top-0 bottom-0 w-1 ${theme.accent}`}></div>
 																	<div className="p-1 pl-2 flex flex-col h-full overflow-hidden justify-center">
 																		<div className={`text-[8px] font-bold opacity-75 leading-none mb-0.5 ${theme.text}`}>

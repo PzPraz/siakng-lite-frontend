@@ -1,5 +1,5 @@
 import { API_BASE_URL, getToken } from "./config";
-import type { IrsResponse } from "../types/api";
+import type { IrsResponse } from '../types';
 
 export const syncIRS = async (payload: { studentId?: string, classIds: number[] }) => {
     const token = getToken();
@@ -46,4 +46,4 @@ export const dropIrs = async(id: number): Promise<IrsResponse> => {
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || 'Gagal drop IRS');
     return data;
-} 
+}

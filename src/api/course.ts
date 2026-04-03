@@ -1,5 +1,5 @@
 import { API_BASE_URL, getToken } from './config';
-import type { Course, CreateCourseDto } from '../types/api';
+import type { Course, CreateCourseDto } from '../types';
 
 export type { Course, CreateCourseDto };
 

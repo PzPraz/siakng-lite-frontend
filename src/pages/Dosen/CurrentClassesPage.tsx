@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Loader2, ArrowLeft, Search } from 'lucide-react';
 import { Header } from '../../components/layout/Header';
 import { getMyClass } from '../../api/classes';
-import { useAuth } from '../../contexts/AuthContext';
-import { type ClassDetail } from '../../types/api';
+import { useAuth } from '../../contexts/useAuth';
+import { type ClassDetail, type ScheduleItem } from '../../types';
 import { getHariName } from '../../utils/helper';
 
 const CurrentClassesPage = () => {
@@ -16,22 +16,22 @@ const CurrentClassesPage = () => {
 	const { user } = useAuth();
 
 	useEffect(() => {
-		fetchClasses();
-	}, []);
+		const fetchClasses = async () => {
+			const dosenId = user?.npm_atau_nip;
+			if (!dosenId) return;
+			try {
+				setLoading(true);
+				const data = await getMyClass(dosenId);
+				setClasses(data);
+			} catch (err: unknown) {
+				setError(err instanceof Error ? err.message : 'Gagal mengambil daftar kelas');
+			} finally {
+				setLoading(false);
+			}
+		};
 
-	const fetchClasses = async () => {
-		const dosenId = user?.npm_atau_nip;
-		if (!dosenId) return;
-		try {
-			setLoading(true);
-			const data = await getMyClass(dosenId);
-			setClasses(data);
-		} catch (err: unknown) {
-			setError(err instanceof Error ? err.message : 'Gagal mengambil daftar kelas');
-		} finally {
-			setLoading(false);
-		}
-	};
+		fetchClasses();
+	}, [user?.npm_atau_nip]);
 
 	const filteredClasses = classes.filter(c =>
 		c.namaKelas.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -121,7 +121,7 @@ const CurrentClassesPage = () => {
 												<div className="p-3 border-r border-gray-200 text-[9px] md:text-[10px] uppercase font-mono text-gray-600 flex items-center">
 													{cls.schedules && Array.isArray(cls.schedules) && cls.schedules.length > 0 ? (
 														<ul className="space-y-1 w-full pl-2 md:pl-4">
-															{cls.schedules.map((sched: any, idx: number) => (
+															{cls.schedules.map((sched: ScheduleItem, idx: number) => (
 																<li key={idx} className="flex items-start gap-1 leading-tight list-none md:list-item -ml-2 md:ml-0">
 																	<span className="text-blue-600 font-black mr-1 md:hidden">•</span>
 																	{typeof sched === 'object' && sched !== null ? (

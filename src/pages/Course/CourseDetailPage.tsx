@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, Info, Trash2, Edit, AlertTriangle } from 'lucide-react';
 import { Header } from '../../components/layout/Header';
 import { getCourseDetail, deleteCourse, type Course } from '../../api/course';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 
 const CourseDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,20 +17,21 @@ const CourseDetailPage = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    if (id) fetchDetail(Number(id));
-  }, [id]);
+    const fetchDetail = async () => {
+      if (!id) return;
+      try {
+        setLoading(true);
+        const data = await getCourseDetail(Number(id));
+        setCourse(data);
+      } catch {
+        navigate('/404')
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchDetail = async (courseId: number) => {
-    try {
-      setLoading(true);
-      const data = await getCourseDetail(courseId);
-      setCourse(data);
-    } catch (err: unknown) {
-      navigate('/404')
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchDetail();
+  }, [id, navigate]);
 
   const handleDelete = async () => {
     if (!id) return;
@@ -38,7 +39,7 @@ const CourseDetailPage = () => {
       setIsDeleting(true);
       await deleteCourse(Number(id));
       navigate('/courses');
-    } catch (err: unknown) {
+    } catch {
       setIsDeleteModalOpen(false);
       navigate('/404')
     } finally {

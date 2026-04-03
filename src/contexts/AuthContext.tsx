@@ -1,11 +1,8 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { getToken, getUser, removeToken, setToken, setUser } from '../api/config';
-import type { AuthUser } from '../types/api';
-import type { AuthContextValue } from '../types/api';
-import type { AuthProviderProps } from '../types/api';
-
-
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+import type { AuthUser } from '../types';
+import type { AuthProviderProps } from '../types';
+import { AuthContext } from './authContext';
 
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -37,14 +34,4 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-
-  return context;
 };

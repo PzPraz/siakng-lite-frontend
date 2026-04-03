@@ -1,18 +1,6 @@
 import type { ReactNode } from "react";
 
-export interface UserData {
-  nama?: string;
-  role?: 'DOSEN' | 'MAHASISWA';
-  npm?: string;
-  nip?: string;
-  npm_atau_nip?: string;
-}
-
-export interface LoginResponse {
-  access_token?: string;
-  user?: UserData;
-  message?: string;
-}
+// Course
 
 export interface Course {
   id: number;
@@ -27,6 +15,8 @@ export interface CreateCourseDto {
   kode: string;
   sks: number;
 }
+
+// Class
 
 export interface ClassDetail {
   id: number;
@@ -67,6 +57,8 @@ export type ScheduleItem = {
   ruangan: string;
 };
 
+// Irs
+
 export type MergedIrsData = {
 	id: number;
 	classId: number;
@@ -76,15 +68,8 @@ export type MergedIrsData = {
 	kodeMatkul?: string;
 	sks?: number;
 	namaDosen?: string;
-	schedules?: any[];
+	schedules?: ScheduleItem[];
 };
-
-export interface Student {
-  id?: number;
-  npm: string;
-  nama: string;
-  statusIrs?: string;
-}
 
 export interface IrsResponse {
     id: string,
@@ -93,6 +78,9 @@ export interface IrsResponse {
     status?: string,
     createdAt?: string,
 }
+
+
+// Auth
 
 export type UserRole = 'DOSEN' | 'MAHASISWA';
 
@@ -113,4 +101,25 @@ export interface AuthContextValue {
 
 export interface AuthProviderProps {
   children: ReactNode;
+}
+
+export interface Student {
+  id?: number;
+  npm: string;
+  nama: string;
+  statusIrs?: string;
+}
+
+export interface UserData {
+  nama?: string;
+  role?: 'DOSEN' | 'MAHASISWA';
+  npm?: string;
+  nip?: string;
+  npm_atau_nip?: string;
+}
+
+export interface LoginResponse {
+  access_token?: string;
+  user?: UserData;
+  message?: string;
 }

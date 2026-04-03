@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, ArrowLeft, Users, UserCheck, PlusCircle, Trash2, MapPin, CalendarDays } from 'lucide-react';
 import { Header } from '../../components/layout/Header';
 import { getClassDetail, updateClass } from '../../api/classes';
-import type { ScheduleItem } from '../../types/api';
+import type { ScheduleItem } from '../../types';
 
 const EditClassPage = () => {
   const { id } = useParams<{ id: string }>();

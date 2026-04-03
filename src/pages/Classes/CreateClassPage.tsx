@@ -4,7 +4,7 @@ import { Loader2, ArrowLeft, Users, UserCheck, PlusCircle, Trash2, MapPin, Calen
 import { Header } from '../../components/layout/Header';
 import { getCourseDetail } from '../../api/course';
 import { createClass } from '../../api/classes';
-import type { ScheduleItem } from '../../types/api';
+import type { ScheduleItem } from '../../types';
 
 const CreateClassPage = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -45,8 +45,10 @@ const CreateClassPage = () => {
     setFormData({ ...formData, schedules: newSchedules });
 
     if (errors.schedules) {
-      const { schedules, ...rest } = errors;
-      setErrors(rest);
+      // Remove schedules error when field changes
+      const newErrors = { ...errors };
+      delete newErrors.schedules;
+      setErrors(newErrors);
     }
   };
 

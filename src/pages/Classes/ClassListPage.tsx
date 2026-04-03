@@ -4,7 +4,7 @@ import { Loader2, ArrowLeft, Search } from 'lucide-react';
 import { Header } from '../../components/layout/Header';
 import { getAllClasses } from '../../api/classes';
 import type { Course } from '../../api/course';
-import type { ClassDetail } from '../../types/api';
+import type { ClassDetail } from '../../types';
 
 const ClassListPage = () => {
   const navigate = useNavigate();

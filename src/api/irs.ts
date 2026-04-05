@@ -1,7 +1,7 @@
 import { API_BASE_URL, getToken } from "./config";
 import type { IrsResponse } from '../types';
 
-export const syncIRS = async (payload: { studentId?: string, classIds: number[] }) => {
+export const syncIRS = async (payload: { classIds: number[] }) => {
     const token = getToken();
     
     const response = await fetch(`${API_BASE_URL}/irs/sync`, {

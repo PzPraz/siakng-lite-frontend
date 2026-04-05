@@ -85,7 +85,6 @@ const FillStudyPlanPage = () => {
             const allSelectedIds = selectedClasses.map(c => c.id);
 
             await syncIRS({
-                studentId: user?.npm_atau_nip,
                 classIds: allSelectedIds
             });
 
